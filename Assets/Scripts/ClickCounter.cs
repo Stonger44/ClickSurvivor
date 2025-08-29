@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ClickCounter : MonoBehaviour
 {
@@ -15,15 +17,58 @@ CHALLENGE GOALS
     3. Increase the bar by a fixed amount when a UI Button is clicked.
     4. Expose difficulty settings (drain rate, click gain) in the Inspector.
     */
-    
+
+    [Header("UI")]
+    [SerializeField] private Slider _progressBar;
+    [SerializeField] private Button _clickButton;
+    [SerializeField] private TextMeshProUGUI _clickCountText;
+
+    [Space(10)]
+    [SerializeField] private float _maxProgressBarValue;
+    [SerializeField] private float _currentProgressBarValue;
+    [SerializeField] private float _drainRate = 20f;
+    [SerializeField] private float _refillAmount = 1f;
+    [SerializeField] private int _clickCount = 0;
+    [SerializeField] private bool _gameOver = false;
     
     private void Start()
     {
-        
+        _maxProgressBarValue = _progressBar.maxValue;
+        _currentProgressBarValue = _maxProgressBarValue;
     }
 
     private void Update()
     {
+        if (_currentProgressBarValue == 0)
+        {
+            _gameOver = true;
+        }
+        else
+        {
+            DrainProgressBar();
+        }
+
         
+    }
+
+    private void DrainProgressBar()
+    {
+        _progressBar.value -= _drainRate * Time.deltaTime;
+        _currentProgressBarValue = _progressBar.value;
+    }
+
+    public void OnHeartClick()
+    {
+        _progressBar.value += _refillAmount;
+        _currentProgressBarValue = _progressBar.value;
+
+        _clickCount++;
+
+        UpdateClickCountText();
+    }
+
+    private void UpdateClickCountText()
+    {
+        _clickCountText.text = _clickCount.ToString();
     }
 }
