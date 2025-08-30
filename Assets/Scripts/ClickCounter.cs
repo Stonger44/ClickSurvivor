@@ -22,6 +22,7 @@ CHALLENGE GOALS
     [SerializeField] private Slider _progressBar;
     [SerializeField] private Button _clickButton;
     [SerializeField] private TextMeshProUGUI _clickCountText;
+    [SerializeField] private GameObject _gameOverUI;
 
     [Space(10)]
     [SerializeField] private float _maxProgressBarValue;
@@ -35,26 +36,28 @@ CHALLENGE GOALS
     {
         _maxProgressBarValue = _progressBar.maxValue;
         _currentProgressBarValue = _maxProgressBarValue;
+
+        SetGameOverUI();
     }
 
     private void Update()
     {
-        if (_currentProgressBarValue == 0)
-        {
-            _gameOver = true;
-        }
-        else
+        if (!_gameOver)
         {
             DrainProgressBar();
         }
-
-        
     }
 
     private void DrainProgressBar()
     {
         _progressBar.value -= _drainRate * Time.deltaTime;
         _currentProgressBarValue = _progressBar.value;
+
+        if (_currentProgressBarValue == 0)
+        {
+            _gameOver = true;
+            SetGameOverUI();
+        }
     }
 
     public void OnHeartClick()
@@ -67,8 +70,26 @@ CHALLENGE GOALS
         UpdateClickCountText();
     }
 
+    public void RestartGame()
+    {
+        Debug.Log("Restart Button Clicked");
+        _gameOver = false;
+        _progressBar.value = _maxProgressBarValue;
+        _currentProgressBarValue = _progressBar.value;
+        _clickCount = 0;
+        UpdateClickCountText();
+        SetGameOverUI();
+    }
+
     private void UpdateClickCountText()
     {
         _clickCountText.text = _clickCount.ToString();
     }
+
+    private void SetGameOverUI()
+    {
+        _clickButton.interactable = !_gameOver;
+        _gameOverUI.SetActive(_gameOver);
+    }
+
 }
