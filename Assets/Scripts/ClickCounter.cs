@@ -35,9 +35,7 @@ CHALLENGE GOALS
     private void Start()
     {
         _maxProgressBarValue = _progressBar.maxValue;
-        _currentProgressBarValue = _maxProgressBarValue;
-
-        SetGameOverUI();
+        SetNewGame();
     }
 
     private void Update()
@@ -53,7 +51,7 @@ CHALLENGE GOALS
         _progressBar.value -= _drainRate * Time.deltaTime;
         _currentProgressBarValue = _progressBar.value;
 
-        if (_currentProgressBarValue == 0)
+        if (_currentProgressBarValue <= 0)
         {
             _gameOver = true;
             SetGameOverUI();
@@ -70,13 +68,13 @@ CHALLENGE GOALS
         UpdateClickCountText();
     }
 
-    public void RestartGame()
+    public void SetNewGame()
     {
-        _gameOver = false;
         _progressBar.value = _maxProgressBarValue;
-        _currentProgressBarValue = _progressBar.value;
+        _currentProgressBarValue = _maxProgressBarValue;
         _clickCount = 0;
         UpdateClickCountText();
+        _gameOver = false;
         SetGameOverUI();
     }
 
