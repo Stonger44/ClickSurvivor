@@ -72,7 +72,6 @@ CHALLENGE GOALS
 
     public void RestartGame()
     {
-        Debug.Log("Restart Button Clicked");
         _gameOver = false;
         _progressBar.value = _maxProgressBarValue;
         _currentProgressBarValue = _progressBar.value;
